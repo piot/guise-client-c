@@ -14,3 +14,4 @@ Makefile
 *.cmake
 CMakeCache.txt
 src/examples/guise_client_cli
+src/examples/secret.txt
