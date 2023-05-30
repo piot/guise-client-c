@@ -3,25 +3,25 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 #include <guise-client/client.h>
-#include <guise-client/incoming_api.h>
 #include <guise-client/network_realizer.h>
-#include <guise-client/outgoing.h>
 #include <imprint/allocator.h>
 
 void guiseClientRealizeInit(GuiseClientRealize* self, const GuiseClientRealizeSettings* settings)
 {
-    self->targetState = GuiseClientRealizeStateInit;
-    self->state = GuiseClientRealizeStateInit;
+    self->targetState = GuiseClientRealizeStateLogin;
+    self->state = GuiseClientRealizeStateLogin;
     self->settings = *settings;
     guiseClientInit(&self->client, settings->memory, &self->settings.transport, settings->log);
+    guiseClientLogin(&self->client, self->settings.userId, self->settings.secretPasswordHash);
 }
 
 void guiseClientRealizeReInit(GuiseClientRealize* self, const GuiseClientRealizeSettings* settings)
 {
-    self->targetState = GuiseClientRealizeStateReInit;
-    self->state = GuiseClientRealizeStateReInit;
+    self->targetState = GuiseClientRealizeStateLogin;
+    self->state = GuiseClientRealizeStateLogin;
     self->settings = *settings;
     guiseClientReInit(&self->client, &self->settings.transport);
+    guiseClientLogin(&self->client, self->settings.userId, self->settings.secretPasswordHash);
 }
 
 void guiseClientRealizeDestroy(GuiseClientRealize* self)
@@ -38,12 +38,7 @@ void guiseClientRealizeReset(GuiseClientRealize* self)
 static void tryConnectAndLogin(GuiseClientRealize* self)
 {
     switch (self->client.state) {
-        case GuiseClientStateConnected:
-            guiseClientLogin(&self->client, self->settings.userId, &self->settings.password);
-            break;
         case GuiseClientStateIdle:
-            break;
-        case GuiseClientStateConnecting:
             break;
         case GuiseClientStateLogin:
             break;
@@ -58,9 +53,10 @@ void guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now)
         guiseClientUpdate(&self->client, now);
     }
 
-    tryConnectAndLogin(self);
-
     switch (self->targetState) {
+        case GuiseClientRealizeStateLogin:
+            tryConnectAndLogin(self);
+            break;
         case GuiseClientRealizeStateCleared:
             if (self->state != GuiseClientRealizeStateCleared) {
                 self->state = self->targetState;

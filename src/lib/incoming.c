@@ -3,20 +3,21 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 #include <clog/clog.h>
+#include <flood/in_stream.h>
 #include <guise-client/client.h>
 #include <guise-client/incoming.h>
 #include <guise-serialize/client_in.h>
 #include <guise-serialize/debug.h>
 #include <guise-serialize/serialize.h>
-#include <flood/in_stream.h>
 #include <imprint/allocator.h>
-
 
 static int onChallengeResponse(GuiseClient* self, FldInStream* inStream)
 {
     GuiseSerializeClientNonce clientNonce;
     GuiseSerializeServerChallenge serverChallenge;
     guiseSerializeClientInChallenge(inStream, &clientNonce, &serverChallenge);
+
+    self->passwordHashedWithChallenge = serverChallenge ^ self->secretPrivatePassword;
 
     CLOG_C_INFO(&self->log, "got challenge from server %016lX", serverChallenge);
 
@@ -30,21 +31,21 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
 {
     GuiseSerializeClientNonce toClientNonce;
     GuiseSerializeUserSessionId userSessionId;
+    GuiseSerializeUserName userName;
 
-    guiseSerializeClientInLogin(inStream, &toClientNonce, &userSessionId);
+    guiseSerializeClientInLogin(inStream, &toClientNonce, &userName, &userSessionId);
 
     if (toClientNonce != self->nonce) {
         return 0;
     }
 
-    CLOG_C_INFO(&self->log, "Logged in as session %d", userSessionId);
+    CLOG_C_INFO(&self->log, "Logged in as '%s' session %016llx", userName.utf8, userSessionId);
 
     self->mainUserSessionId = userSessionId;
     self->state = GuiseClientStateLoggedIn;
 
     return 0;
 }
-
 
 static int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len)
 {

@@ -7,9 +7,9 @@
 
 #include <guise-client/client.h>
 #include <guise-client/network_realizer.h>
+#include <guise-client/types.h>
 #include <guise-serialize/types.h>
 #include <stddef.h>
-#include <guise-client/types.h>
 
 struct ImprintAllocator;
 
@@ -17,16 +17,13 @@ typedef enum GuiseClientRealizeState {
     GuiseClientRealizeStateInit,
     GuiseClientRealizeStateReInit,
     GuiseClientRealizeStateCleared,
-    GuiseClientRealizeStateCreateRoom,
-    GuiseClientRealizeStateJoinRoom,
-    GuiseClientRealizeStateListRooms,
-    GuiseClientRealizeStateListRoomsDone,
+    GuiseClientRealizeStateLogin,
 } GuiseClientRealizeState;
 
 typedef struct GuiseClientRealizeSettings {
     DatagramTransport transport;
     GuiseSerializeUserId userId;
-    GuiseSerializePassword password;
+    uint64_t secretPasswordHash;
     struct ImprintAllocator* memory;
     Clog log;
 } GuiseClientRealizeSettings;

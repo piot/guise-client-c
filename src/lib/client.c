@@ -11,18 +11,20 @@
 void guiseClientReInit(GuiseClient* self, DatagramTransport* transport)
 {
     self->transport = *transport;
-    self->state = GuiseClientStateConnected;
+    self->state = GuiseClientStateIdle;
+    self->waitTime = 0;
 }
 
 int guiseClientInit(GuiseClient* self, struct ImprintAllocator* memory, DatagramTransport* transport, Clog log)
 {
     self->log = log;
     self->userId = 0;
-    self->password.payload[0] = 0;
+    self->secretPrivatePassword = 0;
     self->memory = memory;
-    self->state = GuiseClientStateConnected;
+    self->state = GuiseClientStateIdle;
     self->transport = *transport;
     self->nonce = secureRandomUInt64();
+    self->waitTime = 0;
 
     return 0;
 }

@@ -10,7 +10,7 @@
 
 struct GuiseClient;
 
-int guiseClientLogin(struct GuiseClient* self, GuiseSerializeUserId userId, const GuiseSerializePassword* password);
+int guiseClientLogin(struct GuiseClient* self, GuiseSerializeUserId userId, uint64_t secretPrivatePassword);
 int guiseClientReJoin(struct GuiseClient* self);
 
 #endif

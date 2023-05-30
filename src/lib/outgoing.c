@@ -3,17 +3,16 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 #include <clog/clog.h>
+#include <flood/out_stream.h>
 #include <guise-client/client.h>
 #include <guise-client/debug.h>
 #include <guise-client/outgoing.h>
 #include <guise-serialize/serialize.h>
-#include <flood/out_stream.h>
-
 
 static int updateLogin(GuiseClient* self, FldOutStream* stream)
 {
-    CLOG_C_INFO(&self->log, "serialize login '%s'", self->userId)
-    guiseSerializeClientOutLogin(stream, self->nonce, self->serverChallenge, self->userId, self->password);
+    CLOG_C_INFO(&self->log, "serialize login '%d'", self->userId)
+    guiseSerializeClientOutLogin(stream, self->nonce, self->userId, self->passwordHashedWithChallenge);
     self->waitTime = 60;
 
     return 0;
@@ -21,8 +20,8 @@ static int updateLogin(GuiseClient* self, FldOutStream* stream)
 
 static int updateChallenge(GuiseClient* self, FldOutStream* stream)
 {
-    CLOG_C_INFO(&self->log, "serialize challenge '%s'", self->userId)
-    guiseSerializeClientOutChallenge(stream, self->nonce);
+    CLOG_C_INFO(&self->log, "serialize challenge '%d'", self->userId)
+    guiseSerializeClientOutChallenge(stream, self->userId, self->nonce);
     self->waitTime = 60;
 
     return 0;
@@ -51,7 +50,6 @@ static inline int handleState(GuiseClient* self, MonotonicTimeMs now, DatagramTr
     switch (self->state) {
         case GuiseClientStateIdle:
         case GuiseClientStateLoggedIn:
-        case GuiseClientStateConnected:
         case GuiseClientStatePlaying:
             return 0;
             break;

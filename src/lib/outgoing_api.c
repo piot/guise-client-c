@@ -5,10 +5,11 @@
 #include <clog/clog.h>
 #include <guise-client/client.h>
 
-int guiseClientLogin(GuiseClient* self, GuiseSerializeUserId userId, const GuiseSerializePassword* password)
+int guiseClientLogin(GuiseClient* self, GuiseSerializeUserId userId,
+                     uint64_t secretPrivatePassword)
 {
     self->userId = userId;
-    self->password = *password;
+    self->secretPrivatePassword = secretPrivatePassword;
     self->state = GuiseClientStateChallenge;
     self->waitTime = 0;
 

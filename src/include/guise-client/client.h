@@ -21,8 +21,6 @@ struct FldOutStream;
 
 typedef enum GuiseClientState {
     GuiseClientStateIdle,
-    GuiseClientStateConnecting,
-    GuiseClientStateConnected,
     GuiseClientStateChallenge,
     GuiseClientStateLogin,
     GuiseClientStateLoggedIn,
@@ -35,8 +33,8 @@ struct ImprintAllocator;
 
 typedef struct GuiseClient {
     GuiseSerializeUserId userId;
-    GuiseSerializePassword password;
-
+    uint64_t secretPrivatePassword;
+    GuiseSerializePasswordHashWithChallenge passwordHashedWithChallenge;
     int waitTime;
 
     uint8_t localPlayerIndex;
