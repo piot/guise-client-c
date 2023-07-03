@@ -9,10 +9,11 @@
 #include <guise-client/debug.h>
 #include <guise-client/outgoing.h>
 #include <guise-serialize/serialize.h>
+#include <inttypes.h>
 
 static int updateLogin(GuiseClient* self, FldOutStream* stream)
 {
-    CLOG_C_INFO(&self->log, "serialize login '%d'", self->userId)
+    CLOG_C_DEBUG(&self->log, "serialize login %" PRIx64, self->userId)
     guiseSerializeClientOutLogin(stream, self->nonce, self->userId, self->passwordHashedWithChallenge);
     self->waitTime = 60;
 
@@ -21,7 +22,7 @@ static int updateLogin(GuiseClient* self, FldOutStream* stream)
 
 static int updateChallenge(GuiseClient* self, FldOutStream* stream)
 {
-    CLOG_C_INFO(&self->log, "serialize challenge '%d'", self->userId)
+    CLOG_C_DEBUG(&self->log, "serialize challenge '" PRIx64, self->userId)
     guiseSerializeClientOutChallenge(stream, self->userId, self->nonce);
     self->waitTime = 60;
 
@@ -63,7 +64,7 @@ static inline int handleState(GuiseClient* self, MonotonicTimeMs now, DatagramTr
                 CLOG_SOFT_ERROR("couldnt send it")
                 return result;
             }
-            CLOG_C_VERBOSE(&self->log, "sending packet %d octets", outStream.pos)
+            CLOG_C_VERBOSE(&self->log, "sending packet %zu octets", outStream.pos)
             return transportOut->send(transportOut->self, outStream.octets, outStream.pos);
         }
     }
