@@ -31,10 +31,12 @@ int guiseClientInit(GuiseClient* self, struct ImprintAllocator* memory, Datagram
 
 void guiseClientDestroy(GuiseClient* self)
 {
+    (void) self;
 }
 
 void guiseClientDisconnect(GuiseClient* self)
 {
+    (void) self;
 }
 
 static int sendPackets(GuiseClient* self, MonotonicTimeMs now)
