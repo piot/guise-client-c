@@ -39,7 +39,7 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
         return 0;
     }
 
-    CLOG_C_INFO(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId);
+    CLOG_C_INFO(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId)
 
     self->mainUserSessionId = userSessionId;
     self->state = GuiseClientStateLoggedIn;
@@ -76,7 +76,7 @@ int guiseClientReceiveAllInUdpBuffer(GuiseClient* self)
             guiseClientFeed(self, receiveBuf, (size_t) octetCount);
             count++;
         } else if (octetCount < 0) {
-            CLOG_C_INFO(&self->log, "datagramTransportReceive error: %zd", octetCount);
+            CLOG_C_INFO(&self->log, "datagramTransportReceive error: %zd", octetCount)
             return (int) octetCount;
         } else {
             break;
