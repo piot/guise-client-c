@@ -5,7 +5,7 @@
 #include <guise-client/client.h>
 #include <guise-client/debug.h>
 
-#if CONFIGURATION_DEBUG
+#if defined CONFIGURATION_DEBUG
 
 static const char* stateToString(GuiseClientState state)
 {
@@ -18,6 +18,8 @@ static const char* stateToString(GuiseClientState state)
             return "idle";
         case GuiseClientStateLoggedIn:
             return "logged in";
+        case GuiseClientStatePlaying:
+            break;
     }
 
     return "unknown";
@@ -27,5 +29,7 @@ static const char* stateToString(GuiseClientState state)
 
 void guiseClientDebugOutput(const GuiseClient* self)
 {
+    (void) self;
+
     CLOG_C_INFO(&self->log, "state: %s", stateToString(self->state))
 }

@@ -7,9 +7,8 @@
 #include <guise-client/client.h>
 #include <guise-client/incoming.h>
 #include <guise-serialize/client_in.h>
-#include <guise-serialize/debug.h>
-#include <guise-serialize/serialize.h>
 #include <imprint/allocator.h>
+#include <inttypes.h>
 
 static int onChallengeResponse(GuiseClient* self, FldInStream* inStream)
 {
@@ -19,7 +18,7 @@ static int onChallengeResponse(GuiseClient* self, FldInStream* inStream)
 
     self->passwordHashedWithChallenge = serverChallenge ^ self->secretPrivatePassword;
 
-    CLOG_C_INFO(&self->log, "got challenge from server %016lX", serverChallenge);
+    CLOG_C_INFO(&self->log, "got challenge from server %" PRIx64, serverChallenge);
 
     self->serverChallenge = serverChallenge;
     self->state = GuiseClientStateLogin;
@@ -62,9 +61,8 @@ static int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len)
             return onLoginResponse(self, &inStream);
         default:
             CLOG_C_ERROR(&self->log, "unknown message %02X", cmd)
-            return -1;
+            // return -1;
     }
-    return 0;
 }
 
 int guiseClientReceiveAllInUdpBuffer(GuiseClient* self)
@@ -73,17 +71,17 @@ int guiseClientReceiveAllInUdpBuffer(GuiseClient* self)
     uint8_t receiveBuf[UDP_MAX_RECEIVE_BUF_SIZE];
     size_t count = 0;
     while (1) {
-        int octetCount = datagramTransportReceive(&self->transport, receiveBuf, UDP_MAX_RECEIVE_BUF_SIZE);
+        ssize_t octetCount = datagramTransportReceive(&self->transport, receiveBuf, UDP_MAX_RECEIVE_BUF_SIZE);
         if (octetCount > 0) {
-            guiseClientFeed(self, receiveBuf, octetCount);
+            guiseClientFeed(self, receiveBuf, (size_t) octetCount);
             count++;
         } else if (octetCount < 0) {
-            printf("error: %d\n", octetCount);
-            return octetCount;
+            printf("error: %zd\n", octetCount);
+            return (int) octetCount;
         } else {
             break;
         }
     }
 
-    return count;
+    return (int) count;
 }

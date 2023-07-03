@@ -35,18 +35,6 @@ void guiseClientRealizeReset(GuiseClientRealize* self)
     self->state = GuiseClientRealizeStateCleared;
 }
 
-static void tryConnectAndLogin(GuiseClientRealize* self)
-{
-    switch (self->client.state) {
-        case GuiseClientStateIdle:
-            break;
-        case GuiseClientStateLogin:
-            break;
-        case GuiseClientStateLoggedIn:
-            break;
-    }
-}
-
 void guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now)
 {
     if (self->state != GuiseClientRealizeStateCleared && self->targetState != GuiseClientRealizeStateInit) {
@@ -54,15 +42,14 @@ void guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now)
     }
 
     switch (self->targetState) {
-        case GuiseClientRealizeStateLogin:
-            tryConnectAndLogin(self);
-            break;
         case GuiseClientRealizeStateCleared:
             if (self->state != GuiseClientRealizeStateCleared) {
                 self->state = self->targetState;
             }
             break;
-        default:
+        case GuiseClientRealizeStateLogin:
+        case GuiseClientRealizeStateInit:
+        case GuiseClientRealizeStateReInit:
             break;
     }
 }
