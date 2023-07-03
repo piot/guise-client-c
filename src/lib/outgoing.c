@@ -22,7 +22,7 @@ static int updateLogin(GuiseClient* self, FldOutStream* stream)
 
 static int updateChallenge(GuiseClient* self, FldOutStream* stream)
 {
-    CLOG_C_DEBUG(&self->log, "serialize challenge '" PRIx64, self->userId)
+    CLOG_C_DEBUG(&self->log, "serialize challenge %" PRIx64, self->userId)
     guiseSerializeClientOutChallenge(stream, self->userId, self->nonce);
     self->waitTime = 60;
 
