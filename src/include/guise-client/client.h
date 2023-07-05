@@ -40,6 +40,7 @@ typedef struct GuiseClient {
     uint8_t localPlayerIndex;
     GuiseClientState state;
     GuiseSerializeUserSessionId mainUserSessionId;
+    GuiseSerializeAddress mainNetworkAddress;
     GuiseSerializeClientNonce nonce;
     DatagramTransport transport;
     GuiseSerializeServerChallenge serverChallenge;
@@ -57,6 +58,8 @@ void guiseClientReInit(GuiseClient* self, DatagramTransport* transport);
 void guiseClientDestroy(GuiseClient* self);
 void guiseClientDisconnect(GuiseClient* self);
 int guiseClientUpdate(GuiseClient* self, MonotonicTimeMs now);
+int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len);
 int guiseClientReJoin(GuiseClient* self);
+int guiseClientUpdateOut(GuiseClient* self, MonotonicTimeMs now);
 
 #endif

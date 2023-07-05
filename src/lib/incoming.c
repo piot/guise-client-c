@@ -32,8 +32,9 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
     GuiseSerializeClientNonce toClientNonce;
     GuiseSerializeUserSessionId userSessionId;
     GuiseSerializeUserName userName;
+    GuiseSerializeAddress networkAddress;
 
-    guiseSerializeClientInLogin(inStream, &toClientNonce, &userName, &userSessionId);
+    guiseSerializeClientInLogin(inStream, &toClientNonce, &userName, &userSessionId, &networkAddress);
 
     if (toClientNonce != self->nonce) {
         return 0;
@@ -42,12 +43,14 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
     CLOG_C_INFO(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId)
 
     self->mainUserSessionId = userSessionId;
+    self->mainNetworkAddress = networkAddress;
     self->state = GuiseClientStateLoggedIn;
 
     return 0;
 }
 
-static int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len)
+
+int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len)
 {
     FldInStream inStream;
     fldInStreamInit(&inStream, data, len);

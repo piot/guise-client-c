@@ -37,8 +37,13 @@ void guiseClientRealizeReset(GuiseClientRealize* self)
 
 void guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now)
 {
+    guiseClientRealizeUpdateOut(self, now);
+}
+
+void guiseClientRealizeUpdateOut(GuiseClientRealize* self, MonotonicTimeMs now)
+{
     if (self->state != GuiseClientRealizeStateCleared && self->targetState != GuiseClientRealizeStateInit) {
-        guiseClientUpdate(&self->client, now);
+        guiseClientUpdateOut(&self->client, now);
     }
 
     switch (self->targetState) {

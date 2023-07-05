@@ -62,11 +62,14 @@ int guiseClientUpdate(GuiseClient* self, MonotonicTimeMs now)
         return errorCode;
     }
 
+    return guiseClientUpdateOut(self, now);
+}
+
+int guiseClientUpdateOut(GuiseClient* self, MonotonicTimeMs now)
+{
     self->waitTime--;
     if (self->waitTime > 0) {
         return 0;
     }
-    sendPackets(self, now);
-
-    return errorCode;
+    return sendPackets(self, now);
 }
