@@ -73,7 +73,7 @@ static inline int handleState(GuiseClient* self, MonotonicTimeMs now, DatagramTr
 int guiseClientOutgoing(GuiseClient* self, MonotonicTimeMs now, DatagramTransportOut* transportOut)
 {
     if (self->state != GuiseClientStatePlaying) {
-        guiseClientDebugOutput(self);
+        //guiseClientDebugOutput(self);
     }
 
     int result = handleState(self, now, transportOut);

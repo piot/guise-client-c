@@ -39,7 +39,7 @@ void guiseClientRealizeInit(GuiseClientRealize* self, const GuiseClientRealizeSe
 void guiseClientRealizeReInit(GuiseClientRealize* self, const GuiseClientRealizeSettings* settings);
 void guiseClientRealizeDestroy(GuiseClientRealize* self);
 void guiseClientRealizeReset(GuiseClientRealize* self);
-void guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now);
+int guiseClientRealizeUpdate(GuiseClientRealize* self, MonotonicTimeMs now);
 void guiseClientRealizeUpdateOut(GuiseClientRealize* self, MonotonicTimeMs now);
 
 #endif
