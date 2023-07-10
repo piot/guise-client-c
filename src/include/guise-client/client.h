@@ -52,9 +52,10 @@ typedef struct GuiseClient {
     Clog log;
 } GuiseClient;
 
-int guiseClientInit(GuiseClient* self, struct ImprintAllocator* memory, DatagramTransport* transport, Clog log);
+int guiseClientInit(GuiseClient* self, struct ImprintAllocator* memory, Clog log);
+int guiseClientReInit(GuiseClient* self, struct DatagramTransport* transport, GuiseSerializeUserId userId,
+                      uint64_t secretPrivatePassword);
 void guiseClientReset(GuiseClient* self);
-void guiseClientReInit(GuiseClient* self, DatagramTransport* transport);
 void guiseClientDestroy(GuiseClient* self);
 void guiseClientDisconnect(GuiseClient* self);
 int guiseClientUpdate(GuiseClient* self, MonotonicTimeMs now);

@@ -11,7 +11,7 @@ CMakeFiles/
 build/
 Makefile
 *.a
-*.cmake
+cmake_install.cmake
 CMakeCache.txt
 src/examples/guise_client_cli
 src/examples/secret.txt
