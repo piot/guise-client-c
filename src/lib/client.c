@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 #include <guise-client/client.h>
 #include <guise-client/incoming.h>
-#include <guise-client/incoming_api.h>
 #include <guise-client/outgoing.h>
 #include <secure-random/secure_random.h>
 

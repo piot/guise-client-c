@@ -19,7 +19,7 @@ static int onChallengeResponse(GuiseClient* self, FldInStream* inStream)
 
     self->passwordHashedWithChallenge = serverChallenge ^ self->secretPrivatePassword;
 
-    CLOG_C_INFO(&self->log, "got challenge from server %" PRIx64, serverChallenge)
+    CLOG_C_DEBUG(&self->log, "got challenge from server %" PRIx64, serverChallenge)
 
     self->serverChallenge = serverChallenge;
     self->state = GuiseClientStateLogin;
@@ -40,7 +40,7 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
         return 0;
     }
 
-    CLOG_C_INFO(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId)
+    CLOG_C_DEBUG(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId)
 
     self->mainUserSessionId = userSessionId;
     self->mainNetworkAddress = networkAddress;
@@ -48,7 +48,6 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
 
     return 0;
 }
-
 
 int guiseClientFeed(GuiseClient* self, const uint8_t* data, size_t len)
 {
