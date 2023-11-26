@@ -40,7 +40,7 @@ static int onLoginResponse(GuiseClient* self, FldInStream* inStream)
         return 0;
     }
 
-    CLOG_C_DEBUG(&self->log, "Logged in as '%s' session %" PRIx64, userName.utf8, userSessionId)
+    CLOG_C_DEBUG(&self->log, "Logged in as '%s' (%" PRIx64 ") session %" PRIx64, userName.utf8, self->userId, userSessionId)
 
     self->mainUserSessionId = userSessionId;
     self->mainNetworkAddress = networkAddress;
